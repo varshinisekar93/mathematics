@@ -74,6 +74,30 @@ def multiply_post(numbers: MultiplicationRequest):
     return MultiplicationResponse(a=numbers.a, b=numbers.b, result=result)
 
 
+class DivisionRequest(BaseModel):
+    a: float = Field(..., allow_inf_nan=False)
+    b: float = Field(..., allow_inf_nan=False)
+
+
+class DivisionResponse(BaseModel):
+    a: float
+    b: float
+    result: float
+
+
+@app.post("/divide", response_model=DivisionResponse)
+def divide_post(numbers: DivisionRequest):
+    import math
+    from fastapi import HTTPException
+
+    if numbers.b == 0:
+        raise HTTPException(status_code=422, detail="Cannot divide by zero.")
+    result = numbers.a / numbers.b
+    if not math.isfinite(result):
+        raise HTTPException(status_code=422, detail="The division result is too large.")
+    return DivisionResponse(a=numbers.a, b=numbers.b, result=result)
+
+
 if __name__ == "__main__":
     import uvicorn
 
