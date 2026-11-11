@@ -30,6 +30,28 @@ def add_post(numbers: AdditionRequest):
     return add_numbers(numbers.a, numbers.b)
 
 
+class SubtractionRequest(BaseModel):
+    a: float = Field(..., allow_inf_nan=False)
+    b: float = Field(..., allow_inf_nan=False)
+
+
+class SubtractionResponse(BaseModel):
+    a: float
+    b: float
+    result: float
+
+
+@app.post("/subtract", response_model=SubtractionResponse)
+def subtract_post(numbers: SubtractionRequest):
+    import math
+    from fastapi import HTTPException
+
+    result = numbers.a - numbers.b
+    if not math.isfinite(result):
+        raise HTTPException(status_code=422, detail="The subtraction result is too large.")
+    return SubtractionResponse(a=numbers.a, b=numbers.b, result=result)
+
+
 if __name__ == "__main__":
     import uvicorn
 
