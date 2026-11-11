@@ -1,6 +1,6 @@
 # Mathematics API
 
-A FastAPI application for adding and subtracting two numbers.
+A FastAPI application for adding, subtracting, and multiplying two numbers.
 
 ## Setup (PowerShell)
 
@@ -13,6 +13,8 @@ python -m venv .venv
 The server runs at http://127.0.0.1:8000. To change the host or port, edit the `uvicorn.run` call in `main.py`.
 
 ## Endpoints
+
+- `POST /multiply` — calculates `a * b`. Accepts JSON `{"a":6,"b":7}` and returns `{"a":6.0,"b":7.0,"result":42.0}`.
 
 - `POST /subtract` — calculates `a - b`. Accepts JSON `{"a":10,"b":3}` and returns `{"a":10.0,"b":3.0,"result":7.0}`.
 
@@ -63,3 +65,9 @@ Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:8123/subtract' -ContentTyp
 ```
 
 Rebuild the container with `docker compose up --build -d` after updating the code.
+
+## Multiplication example (Docker)
+
+```powershell
+Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:8123/multiply' -ContentType 'application/json' -Body '{"a":6,"b":7}'
+```
